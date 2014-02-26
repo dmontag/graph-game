@@ -46,6 +46,10 @@ body {
     font-weight: bold;
 }
 
+.questionBlock {
+    padding-top: 1em;
+}
+
 .answer {    
     margin-top: 10px;
 }
@@ -59,6 +63,11 @@ body {
 
 .congrats {
     font-weight: bold;
+}
+
+.tip {
+    font-style: italic;
+    font-size: 0.8em;
 }
 
 </style>
@@ -121,6 +130,7 @@ function renderLevels(levels, settings) {
         .append("div")
             .attr("class", function(d, i) { return "score-" + i; });
     scores.append("h4").text("Browse the graph to answer the questions!");
+    scores.append("div").attr("class", "tip").text("Hint: press <enter> after typing each answer.")
     scores.each(function(level, levelnum) {
         var score = d3.select(".score-" + levelnum);
         level.questions.forEach(function(question, qnum) {
