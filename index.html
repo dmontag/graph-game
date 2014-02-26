@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Neo4j Eval Center</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script type="text/javascript" src="js/jquery/jquery-2.0.3.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+
+    <script src="js/d3.v3.min.js" charset="utf-8"></script>
+    <script src="js/models.js" charset="utf-8"></script>
+    <script src="js/levels.js" charset="utf-8"></script>
+    <script src="js/modelviz.js" charset="utf-8"></script>
+
+<style>
+
+.levels {
+    padding: 1em;
+}
+
+.node {
+    stroke: #444;
+    stroke-width: 2px;
+}
+
+.link {
+    stroke: #999;
+    stroke-opacity: .8;
+}
+
+.legend {
+    opacity: 0.5;
+}
+
+.hidden {
+    display: none;
+}
+
+.question {
+    font-weight: bold;
+}
+
+.answer {    
+    margin-top: 10px;
+}
+
+.result {
+    padding-left: 1em;
+    display: inline-block; 
+    vertical-align: middle;
+    font-style: italic;
+}
+
+.congrats {
+    font-weight: bold;
+}
+
+</style>
+
+<script type="text/javascript">
+
+var activeLevel = 0;
+
+$(document).ready(function() {
+
+    var settings = {
+        width: 600,
+        height: 600,
+
+        forceCharge: -500,
+        forceDistance: 50,
+
+        nodeRadius: 10,
+        textOffsetX: 10,
+        textOffsetY: -5
+    };
+
+    renderLevels(levels, settings);
+    showCurrentLevel();
+
+});
+
+function showCurrentLevel() {
+    showLevel(activeLevel);
+}
+
+function showLevel(level) {
+    $(".level").addClass("hidden")
+    $(".level-" + level).removeClass("hidden");
+}
+
+
+function renderLevels(levels, settings) {
+    var l = d3.select(".levels").selectAll(".level")
+        .data(levels);
+    var levelDiv = l.enter()
+        .append("div")
+        .attr("class", function(d, i) { return "level hidden level-" + i; });
+
+    levelDiv.append("div")
+        .attr("class", "row-fluid")
+        .append("div")
+            .attr("class", "span12")
+            .append("h1")
+                .text(function(d) { return d.name; });
+    var contentRow = levelDiv.append("div")
+        .attr("class", "row-fluid");
+    contentRow.append("div")
+        .attr("class", "span7")
+        .append("div")
+            .attr("class", function(d, i) { return "viz-" + i; });
+    var scores = contentRow.append("div")
+        .attr("class", "span5")
+        .append("div")
+            .attr("class", function(d, i) { return "score-" + i; });
+    scores.each(function(level, levelnum) {
+        var score = d3.select(".score-" + levelnum);
+        level.questions.forEach(function(question, qnum) {
+            var questionBlock = score.append("div")
+                .attr("class", "questionBlock");
+            questionBlock.append("div")
+                .attr("class", "question").text("Q" + (qnum+1) + ": " + question.question);
+            var inputDiv = questionBlock.append("div")
+                .attr("class", "answerRow");
+            inputDiv.append("input")
+                .attr("type", "text")
+                .attr("class", function(d) { 
+                    return "answer level-" + levelnum + "-answer-" + qnum; 
+                })
+                .on("keyup", function(d) {
+                    if (d3.event.keyCode == 13) {
+                        checkAnswer(level, levelnum, qnum);
+                    }                
+                });
+            inputDiv.append("span")
+                .attr("class", function(d) { 
+                    return "result level-" + levelnum + "-result-" + qnum; 
+                });
+        });
+        
+    });
+    scores.append("div")
+                .attr("class", function(d, i) {return "congrats congrats-" + i;});
+
+
+
+    levelDiv.each(function(d, i) {
+        d.viz = new ModelViz(settings, ".viz-" + i, d.model);
+    });
+
+    l.exit().remove();  
+}
+
+function checkAnswer(level, levelnum, qnum) {
+    var answer = $(".level-" + levelnum + "-answer-" + qnum).val().toLowerCase();
+    if ($.inArray(answer, level.questions[qnum].answers) >= 0) {
+        $(".level-" + levelnum + "-result-" + qnum).text("Correct!");
+        level.questions[qnum].passed = true;
+    } else {
+        $(".level-" + levelnum + "-result-" + qnum).text("Wrong, try again.");
+        level.questions[qnum].passed = false;
+    }
+    var allPassed = level.questions.map(function(q) {return q.passed;}).reduce(function(a,b) {return a && b;});
+    
+    if (allPassed && !level.completed) {
+        level.completed = true;
+        if (activeLevel == levels.length-1) {
+            $(".congrats-" + levelnum).text("Congratulations! You completed all the levels.");
+        } else {
+            $(".congrats-" + levelnum).text("Congratulations! Try the next level.");
+            setTimeout(function() {
+                showLevel(levelnum+1);
+            }, 3000);
+        }
+    }
+}
+    </script>
+</head>
+<body>
+<div class="levels"></div>
+</body>
+</html>

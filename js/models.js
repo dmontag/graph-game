@@ -26,14 +26,14 @@ var productCatalogModel = {
         "Product"
     ],
     nodes: [
-        {name: "Cat - All", label: "Category"}, 
-        {name: "Cat - Tools", label: "Category"}, 
-        {name: "Cat - Power Tools", label: "Category"}, 
-        {name: "Cat - Screwdrivers", label: "Category"},
+        {name: "All", label: "Category"}, 
+        {name: "Tools", label: "Category"}, 
+        {name: "Power Tools", label: "Category"}, 
+        {name: "Screwdrivers", label: "Category"},
         {name: "Power saw [$1,000]", label: "Product"},
         {name: "Drill [$2,000]", label: "Product"},
         {name: "Phillips Screwdriver [$20]", label: "Product", _visible: true},
-        {name: "Cat - Storage", label: "Category"}, 
+        {name: "Storage", label: "Category"}, 
         {name: "50gal Plastic Bin [$40]", label: "Product"}
     ], 
     links: [
@@ -95,7 +95,7 @@ var fraudDetectionModel = {
         {name: "Jane", label: "Merchant Account", _visible: true}, // 6
         {name: "Cayman Account #42", label: "Bank Account"},
         {name: "Jimmy", label: "Merchant Account"},
-        {name: "152-35-6745", label: "Social Security Number"},
+        {name: "SSN #152-35-6745", label: "Social Security Number"},
         {name: "Robert", label: "Merchant Account"},
 
         {name: "Shrinivas", label: "Merchant Account", _visible: true}, // 11
@@ -162,9 +162,9 @@ var accessControlModel = {
         {source: 2, target: 5},
 
         {source: 0, target: 7},
+        {source: 0, target: 8},
         {source: 1, target: 8},
         {source: 2, target: 7},
-        {source: 2, target: 8},
 
         {source: 9, target: 7},
         {source: 10, target: 8}

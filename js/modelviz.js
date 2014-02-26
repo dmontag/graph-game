@@ -1,5 +1,5 @@
 
-function ModelViz(settings, model) {
+function ModelViz(settings, parent, model) {
 
     var scale = d3.scale.category10();
 
@@ -9,9 +9,9 @@ function ModelViz(settings, model) {
         .on("tick", tick)
         .size([settings.width, settings.height]);
 
-    var svg = d3.select("body").append("svg")
-        .attr("width", settings.width)
-        .attr("height", settings.height);
+    var svg = d3.select(parent || "body").append("svg");
+        // .attr("width", settings.width)
+        // .attr("height", settings.height);
     var linkGroup = svg.append("g").attr("class", "links");
     var nodeGroup = svg.append("g").attr("class", "nodes");
     var legendGroup = svg.append("g").attr("class", "legend");
