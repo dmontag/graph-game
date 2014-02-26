@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Neo4j Eval Center</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <script type="text/javascript" src="js/jquery/jquery-2.0.3.js"></script>
+    <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
+
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<style>
+
+.node {
+    stroke: #fff;
+    stroke-width: 1.5px;
+}
+
+.link {
+    stroke: #999;
+    stroke-opacity: .6;
+}
+
+</style>
+
+<script type="text/javascript">
+
+$(document).ready(function() {
+
+var width = 400,
+    height = 300;
+
+var scale = d3.scale.category10();
+
+var force = d3.layout.force()
+    .charge(-120)
+    .linkDistance(30)
+    .on("tick", tick)
+    .size([width, height]);
+
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+var linkGroup = svg.append("g").attr("class", "links");
+var nodeGroup = svg.append("g").attr("class", "nodes");
+
+var link, node;
+
+var model = {
+    nodes: [
+        {name: "A", _v: true}, 
+        {name: "B"},
+        {name: "C"},
+        {name: "D"},
+        {name: "E", _v: true},
+        {name: "F"}
+    ], 
+    links: [
+        {source:0, target:1},
+        {source:1, target:2},
+        {source:2, target:3},
+        {source:2, target:5},
+        {source:3, target:4}
+    ]
+};
+
+$.each(model.links, function(i, l) {
+    l.source = model.nodes[l.source];
+    l.target = model.nodes[l.target];
+});
+
+function update() {
+
+    var nodes = model.nodes.filter(function(n) {return n._v;});
+    var links = model.links.filter(function(l) {
+        return l.source._e || l.target._e;
+    });
+
+    // var links = model.links.filter(function(d) {
+    //     return $.inArray(d.source, model.visible) && $.inArray(d.target, model.visible);
+    // }).map(function(d) {
+    //     return {source:model.nodes[d.source], target:model.nodes[d.target]};
+    // });
+    // var nodes = model.nodes;
+
+    console.log("Nodes: " + JSON.stringify(nodes));
+    console.log("Links: " + JSON.stringify(links));
+
+    force
+        .nodes(nodes)
+        .links(links)
+        .start();
+
+    link = linkGroup.selectAll(".link")
+        .data(links);
+    link.enter().append("line")
+        .attr("class", "link");
+    link.exit().remove();
+
+    node = nodeGroup.selectAll(".node")
+        .data(nodes)
+        .style("fill", color);
+    node.enter().append("circle")
+        .attr("class", "node")
+        .attr("r", 10)
+        .style("fill", color)
+        .on("click", expand)
+        .call(force.drag);
+    node.exit().remove();
+}
+
+function expand(d) {
+    d._e = true;
+    $.each(model.links, function(i, l) {
+        var otherNode = getOtherNode(d, l);
+        if (otherNode) {
+            otherNode._v = true;
+            var neighbors = model.links.filter(function(link) {
+                return nodeHasLink(otherNode, link);
+            }).map(function (link) {
+                return getOtherNode(otherNode, link);
+            });
+            if (neighbors.length == neighbors.map(function(neighbor) {
+                return neighbor._e ? 1 : 0;
+            }).reduce(function (a,b) { return a + b; })) {
+                otherNode._e = true;
+            }
+        }
+    });
+    update();
+}
+
+function getOtherNode(node, link) {
+    if (link.source === node) return link.target;
+    if (link.target === node) return link.source;
+    return null;
+}
+
+function nodeHasLink(node, link) {
+    return getOtherNode(node, link) !== null;
+}
+
+function color(d) {
+    console.log("Color: " + JSON.stringify(d));
+    return d._e ? scale(1) : scale(2);
+}
+
+function tick() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    node.attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+}
+
+update();
+
+});
+    </script>
+</head>
+<body>
+
+</body>
+</html>
