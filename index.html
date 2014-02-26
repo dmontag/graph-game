@@ -112,10 +112,12 @@ function renderLevels(levels, settings) {
         .attr("class", "span7")
         .append("div")
             .attr("class", function(d, i) { return "viz-" + i; });
+
     var scores = contentRow.append("div")
         .attr("class", "span5")
         .append("div")
             .attr("class", function(d, i) { return "score-" + i; });
+    scores.append("h4").text("Browse the graph to answer the questions!");
     scores.each(function(level, levelnum) {
         var score = d3.select(".score-" + levelnum);
         level.questions.forEach(function(question, qnum) {
