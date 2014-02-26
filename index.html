@@ -176,7 +176,7 @@ function checkAnswer(level, levelnum, qnum) {
     
     if (allPassed && !level.completed) {
         level.completed = true;
-        if (activeLevel == levels.length-1) {
+        if (levelnum == levels.length-1) {
             $(".congrats-" + levelnum).text("Congratulations! You completed all the levels.");
         } else {
             $(".congrats-" + levelnum).text("Congratulations! Try the next level.");
