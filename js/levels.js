@@ -48,7 +48,7 @@ var levels = [
         ]
     },
     {
-        name: "Network Management",
+        name: "Network Dependency Graph",
         model: networkManagementModel,
         questions: [
             {
@@ -57,7 +57,7 @@ var levels = [
                 correct: "Database VM"
             },
             {
-                question: "What downstream system, apart from the database VM, do both the public website and the CRM system depend on?",
+                question: "What downstream system do both servers 1 and 2 depend on?",
                 answers: ["san", "storage", "storage area network", "storage network", "san system"],
                 correct: "SAN"
             },
