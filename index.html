@@ -187,7 +187,11 @@ function checkAnswer(level, levelnum, qnum) {
     if (allPassed && !level.completed) {
         level.completed = true;
         if (levelnum == levels.length-1) {
-            $(".congrats-" + levelnum).text("Congratulations! You completed all the levels.");
+            d3.select(".congrats-" + levelnum)
+                .text("Congratulations! You completed all the levels. ")
+                .append("a")
+                    .attr("href", "http://neotechnology.com/training")
+                    .text("Learn more!");
         } else {
             $(".congrats-" + levelnum).text("Good job! Stand by for the next level!");
             setTimeout(function() {
