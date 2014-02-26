@@ -189,7 +189,7 @@ function checkAnswer(level, levelnum, qnum) {
         if (levelnum == levels.length-1) {
             $(".congrats-" + levelnum).text("Congratulations! You completed all the levels.");
         } else {
-            $(".congrats-" + levelnum).text("Congratulations! Try the next level.");
+            $(".congrats-" + levelnum).text("Good job! Stand by for the next level!");
             setTimeout(function() {
                 showLevel(levelnum+1);
             }, 3000);
