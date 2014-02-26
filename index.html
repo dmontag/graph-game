@@ -117,7 +117,7 @@ function renderLevels(levels, settings) {
         .append("div")
             .attr("class", "span12")
             .append("h1")
-                .text(function(d) { return d.name; });
+                .text(function(d, i) { return d.name + " (" + (i+1) + "/" + levels.length + ")"; });
     var contentRow = levelDiv.append("div")
         .attr("class", "row-fluid");
     contentRow.append("div")
