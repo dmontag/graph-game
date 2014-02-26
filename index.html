@@ -139,7 +139,11 @@ function renderLevels(levels, settings) {
                     if (d3.event.keyCode == 13) {
                         checkAnswer(level, levelnum, qnum);
                     }                
-                });
+                })
+                // .on("blur", function(d) {
+                //     checkAnswer(level, levelnum, qnum);
+                // })
+                ;
             inputDiv.append("span")
                 .attr("class", function(d) { 
                     return "result level-" + levelnum + "-result-" + qnum; 

@@ -10,12 +10,12 @@ var levels = [
                 correct: "3"
             },
             {
-                question: "How many friends does Bob have?",
+                question: "How many friends does Eve have?",
                 answers: ["1", "one"],
                 correct: "1"
             },
             {
-                question: "Which friend do Alice and Bob have in common?",
+                question: "Which friend do Alice and Eve have in common?",
                 answers: ["charlie"],
                 correct: "Charlie"
             }
