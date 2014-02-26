@@ -25,6 +25,10 @@
     stroke-opacity: .8;
 }
 
+.legend {
+    opacity: 0.5;
+}
+
 </style>
 
 <script type="text/javascript">
@@ -56,8 +60,9 @@ var svg = d3.select("body").append("svg")
     .attr("height", settings.height);
 var linkGroup = svg.append("g").attr("class", "links");
 var nodeGroup = svg.append("g").attr("class", "nodes");
+var legendGroup = svg.append("g").attr("class", "legend");
 
-var link, node, text;
+var link, node, text, legend;
 
 
 var model = 
@@ -93,19 +98,18 @@ function update() {
 
     node = nodeGroup.selectAll(".node")
         .data(nodes)
-        .style("fill", color)
+        .style("fill", nodeColor)
         .style("stroke-dasharray", strokeDasharray);
     node.enter()
         .append("circle")
             .attr("class", "node")
             .attr("r", settings.nodeRadius)
-            .style("fill", color)
+            .style("fill", nodeColor)
             .style("stroke-dasharray", strokeDasharray)
             .on("click", expand)
             .call(force.drag);
     node.exit().remove();
 
-    console.log(nodes);
     text = nodeGroup.selectAll(".text")
         .data(nodes)
         .text(function (d) { return d.name; });
@@ -114,6 +118,21 @@ function update() {
             .attr("class", "text")
             .text(function (d) { return d.name; });
     text.exit().remove();
+
+    legend = legendGroup.selectAll(".legend")
+        .data(model.labels);
+    legend.enter().append("circle")
+            .attr("class", "node")
+            .attr("r", settings.nodeRadius)
+            .attr("cx", settings.nodeRadius*2)
+            .attr("cy", function(d, i) { return settings.nodeRadius*2 + (i) * settings.nodeRadius*3; })
+            .style("fill", legendColor);
+    legend.enter()
+            .append("text")
+            .attr("x", settings.nodeRadius*4)
+            .attr("y", function(d, i) { return settings.nodeRadius*2.5 + (i) * settings.nodeRadius*3; })
+            .text(function(d) { return d; });
+
 }
 
 function expand(node) {
@@ -156,9 +175,12 @@ function getOtherNode(node, link) {
     return null;
 }
 
-function color(d) {
-    // return d._expanded ? scale(1) : scale(2);
+function nodeColor(d) {
     return scale(d.label)
+}
+
+function legendColor(d) {
+    return scale(d)
 }
 
 function strokeDasharray(d) {

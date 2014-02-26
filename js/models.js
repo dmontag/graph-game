@@ -1,11 +1,14 @@
 var socialModel = {
     style: "graph",
+    labels: [
+        "Person"
+    ],
     nodes: [
-        {name: "Alice", _visible: true}, 
-        {name: "Bob"},
-        {name: "Charlie"},
-        {name: "Dianne"},
-        {name: "Eve", _visible: true}
+        {name: "Alice", label: "Person", _visible: true}, 
+        {name: "Bob", label: "Person"},
+        {name: "Charlie", label: "Person"},
+        {name: "Dianne", label: "Person"},
+        {name: "Eve", label: "Person", _visible: true}
     ], 
     links: [
         {source:0, target:1},
@@ -17,16 +20,20 @@ var socialModel = {
 
 var productCatalogModel = {
     style: "tree",
+    labels: [
+        "Category",
+        "Product"
+    ],
     nodes: [
-        {name: "Cat - All"}, 
-        {name: "Cat - Tools"}, 
-        {name: "Cat - Power Tools"}, 
-        {name: "Cat - Screwdrivers"},
-        {name: "Power saw [$1,000]"},
-        {name: "Drill [$2,000]"},
-        {name: "Phillips Screwdriver [$20]", _visible: true},
-        {name: "Cat - Storage"}, 
-        {name: "50gal Plastic Bin [$40]"}
+        {name: "Cat - All", label: "Category"}, 
+        {name: "Cat - Tools", label: "Category"}, 
+        {name: "Cat - Power Tools", label: "Category"}, 
+        {name: "Cat - Screwdrivers", label: "Category"},
+        {name: "Power saw [$1,000]", label: "Product"},
+        {name: "Drill [$2,000]", label: "Product"},
+        {name: "Phillips Screwdriver [$20]", label: "Product", _visible: true},
+        {name: "Cat - Storage", label: "Category"}, 
+        {name: "50gal Plastic Bin [$40]", label: "Product"}
     ], 
     links: [
         {source:0, target:1},
@@ -67,5 +74,6 @@ var networkManagementModel = {
         {source:1, target:0}
     ]
 };
+
 
 
