@@ -112,35 +112,44 @@ function update() {
     node.exit().remove();
 }
 
-function expand(d) {
-    d._e = true;
-    $.each(model.links, function(i, l) {
-        var otherNode = getOtherNode(d, l);
-        if (otherNode) {
-            otherNode._v = true;
-            var neighbors = model.links.filter(function(link) {
-                return nodeHasLink(otherNode, link);
-            }).map(function (link) {
-                return getOtherNode(otherNode, link);
-            });
-            if (neighbors.length == neighbors.map(function(neighbor) {
-                return neighbor._e ? 1 : 0;
-            }).reduce(function (a,b) { return a + b; })) {
-                otherNode._e = true;
-            }
-        }
+function expand(node) {
+    if (node._e === true) return;
+    node._e = true;
+    getNeighborLinks(node).forEach(function(link) {
+        show(getOtherNode(node, link));
     });
     update();
+}
+
+function show(node) {
+    node._v = true;
+    var neighbors = getNeighborNodes(node);
+    var numExpandedNeighbors = neighbors.filter(function(node) { return node._e; }).length;
+    if (neighbors.length == numExpandedNeighbors) {
+        node._e = true;
+    }
+}
+
+function getNeighborLinks(node) {
+    return model.links.filter(function(link) {
+        return nodeHasLink(node, link);
+    });
+}
+
+function getNeighborNodes(node) {
+    return getNeighborLinks(node).map(function (link) {
+        return getOtherNode(node, link);
+    });
+}
+
+function nodeHasLink(node, link) {
+    return getOtherNode(node, link) !== null;
 }
 
 function getOtherNode(node, link) {
     if (link.source === node) return link.target;
     if (link.target === node) return link.source;
     return null;
-}
-
-function nodeHasLink(node, link) {
-    return getOtherNode(node, link) !== null;
 }
 
 function color(d) {
