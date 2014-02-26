@@ -1,5 +1,7 @@
-
+var modelVizInstanceCounter = 0;
 function ModelViz(settings, parent, model) {
+
+    var instance = modelVizInstanceCounter++;
 
     var scale = d3.scale.category10();
 
@@ -17,6 +19,18 @@ function ModelViz(settings, parent, model) {
     var legendGroup = svg.append("g").attr("class", "legend");
 
     var link, node, text, legend;
+
+    svg.append('svg:defs')
+        .append('svg:marker')
+            .attr('viewBox', '0 -4 10 10')
+            .attr('refX', 25).attr('refY', 0)
+            .attr('markerWidth', 7)
+            .attr('markerHeight', 7)
+            .attr("id", "end-marker-" + instance)
+            .attr('orient', 'auto')
+            .append('svg:path')
+                .attr('d', 'M0,-4L10,0L0,4')
+                .attr('class', 'arrowhead');
 
     prepareModel(model);
 
@@ -42,7 +56,8 @@ function ModelViz(settings, parent, model) {
         link = linkGroup.selectAll(".link")
             .data(links);
         link.enter().append("line")
-            .attr("class", "link");
+            .attr("class", "link")
+            .attr('marker-end', "url(#end-marker-" + instance + ")");
         link.exit().remove();
 
         node = nodeGroup.selectAll(".node")
