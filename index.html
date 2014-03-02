@@ -136,7 +136,7 @@ function renderLevels(levels, settings) {
         .append("div")
             .attr("class", function(d, i) { return "score-" + i; });
     scores.append("h4").text("Browse the graph to answer the questions!");
-    scores.append("div").attr("class", "tip").text("Hint: press <enter> after typing each answer.")
+    scores.append("div").attr("class", "tip").text("Hint: click the nodes to expand them.")
     scores.each(function(level, levelnum) {
         var score = d3.select(".score-" + levelnum);
         level.questions.forEach(function(question, qnum) {
@@ -156,9 +156,9 @@ function renderLevels(levels, settings) {
                         checkAnswer(level, levelnum, qnum);
                     }                
                 })
-                // .on("blur", function(d) {
-                //     checkAnswer(level, levelnum, qnum);
-                // })
+                .on("blur", function(d) {
+                    checkAnswer(level, levelnum, qnum);
+                })
                 ;
             inputDiv.append("span")
                 .attr("class", function(d) { 
