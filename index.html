@@ -181,6 +181,7 @@ function renderLevels(levels, settings) {
 
 function checkAnswer(level, levelnum, qnum) {
     var answer = $(".level-" + levelnum + "-answer-" + qnum).val().toLowerCase();
+    if (answer == "") return;
     if ($.inArray(answer, level.questions[qnum].answers) >= 0) {
         $(".level-" + levelnum + "-result-" + qnum).text("Correct!");
         level.questions[qnum].passed = true;
