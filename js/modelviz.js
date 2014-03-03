@@ -56,8 +56,8 @@ function ModelViz(settings, parent, model) {
         link = linkGroup.selectAll(".link")
             .data(links);
         link.enter().append("line")
-            .attr("class", "link")
-            .attr('marker-end', "url(#end-marker-" + instance + ")");
+            .attr("class", "link");
+            // .attr('marker-end', "url(#end-marker-" + instance + ")");
         link.exit().remove();
 
         node = nodeGroup.selectAll(".node")
